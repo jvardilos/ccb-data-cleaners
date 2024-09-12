@@ -1,25 +1,50 @@
 import pandas as pd
+from enum import Enum
 
-df = pd.read_csv("sample.csv")
 
-name = "Name"
-spouse = "Spouse"
-andSpouse = "Spouse2"
-pledged = "Pledged"
-given = "Given"
-email = "Email"
+class column(Enum):
+    NAME = "Name"
+    SPOUSE = "Spouse"
+    AND_SPOUSE = "Spouse2"
+    PLEDGED = "Pledged"
+    GIVEN = "Given"
+    EMAIL = "Email"
 
-# extract names of couples into columns
-df[[name, spouse]] = df[name].str.extract(r"(\w+)(?:\s*&\s*(\w+))?", expand=True)
-df[andSpouse] = "and " + df[spouse]
 
-# TODO: do we want to include pledgers who have not given??
-# split the dataset to those who have pledged and those who
-# have given
-pledgedgivers = df[df[pledged] > 0]
-givers = df[(df["Pledged"] == 0) & (df["Given"] > 0)]
+def format_couples(df):
+    df[[column.NAME.value, column.SPOUSE.value]] = df[column.NAME.value].str.extract(
+        r"(\w+)(?:\s*&\s*(\w+))?", expand=True
+    )
+    df[column.AND_SPOUSE.value] = "and " + df[column.SPOUSE.value]
+    return df
 
-# create csv
-cols = [name, spouse, andSpouse, pledged, given, email]
-pledgedgivers[cols].to_csv("pledgedgivers.csv", index=False)
-givers[cols].to_csv("givers.csv", index=False)
+
+def filter_pledgers_and_givers(df):
+    pledged_givers = df[df[column.PLEDGED.value] > 0]
+    givers = df[(df[column.PLEDGED.value] == 0) & (df[column.GIVEN.value] > 0)]
+    return pledged_givers, givers
+
+
+def create_csv(title, df):
+    cols = [
+        column.NAME.value,
+        column.SPOUSE.value,
+        column.AND_SPOUSE.value,
+        column.PLEDGED.value,
+        column.GIVEN.value,
+        column.EMAIL.value,
+    ]
+    df[cols].to_csv(title, index=False)
+
+
+def main():
+    df = pd.read_csv("sample.csv")
+
+    formatted = format_couples(df)
+    pledged_givers, givers = filter_pledgers_and_givers(formatted)
+    create_csv("pledgedgivers.csv", pledged_givers)
+    create_csv("givers.csv", givers)
+
+
+if __name__ == "__main__":
+    main()
