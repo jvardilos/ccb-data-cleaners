@@ -6,22 +6,30 @@ input_file = "pledge_and_giving_detail.csv"
 
 class Column(Enum):
     NAME = "Name(s)"
-    # SPOUSE = "Spouse"
-    # AND_SPOUSE = "Spouse2"
+    LAST_NAME = "Last Name"
+    FIRST_NAME = "First Name"
+    SPOUSE = "Spouse"
+    AND_SPOUSE = "Spouse2"
     PLEDGED = "Total Pledged"
     GIVEN = "Total Given (all-time)"
     EMAIL = "Email"
 
 
-# TODO: split names in (<last name>, <name1> & <name2>), (<last name1>, <name1>, <last name2>, <name2>)
-# and (<last name>, <name>)
 def format_couples(df):
-    # df[[Column.NAME.value, Column.SPOUSE.value]] = df[Column.NAME.value].str.extract(
-    #     r"(\w+)(?:\s*&\s*(\w+))?", expand=True
-    # )
-    # df[Column.AND_SPOUSE.value] = df[Column.SPOUSE.value].apply(
-    #     lambda x: f"and {x}" if pd.notna(x) else ""
-    # )
+    # Last name column
+    df[Column.LAST_NAME.value] = df[Column.NAME.value].str.extract(r"^(\w+),?")[0]
+    # First name column
+    df[Column.FIRST_NAME.value] = df[Column.NAME.value].str.extract(r",\s*([\w]+)")[0]
+
+    # Handling the spouse name by detecting patterns with '&' or additional commas
+    df[Column.SPOUSE.value] = (
+        df[Column.NAME.value].str.extract(r"&\s*(\w+)|,\s*(\w+)$")[0].fillna("")
+    )
+
+    # Creating the 'AND_SPOUSE' column
+    df[Column.AND_SPOUSE.value] = df[Column.SPOUSE.value].apply(
+        lambda x: f"and {x}" if x else ""
+    )
 
     return df
 
@@ -49,8 +57,10 @@ def create_csv(title, df):
     try:
         cols = [
             Column.NAME.value,
-            # Column.SPOUSE.value,
-            # Column.AND_SPOUSE.value,
+            Column.LAST_NAME.value,
+            Column.FIRST_NAME.value,
+            Column.SPOUSE.value,
+            Column.AND_SPOUSE.value,
             Column.PLEDGED.value,
             Column.GIVEN.value,
             Column.EMAIL.value,
