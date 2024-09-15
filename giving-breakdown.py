@@ -15,7 +15,18 @@ class Column(Enum):
     EMAIL = "Email"
 
 
+def clean_names(name_string):
+    # Split the string by commas and strip any whitespace
+    parts = [x.strip() for x in name_string.split(",")]
+    if len(parts) == 4:
+        # Format the string as: "lastname1, name1 & name2"
+        return f"{parts[0]}, {parts[1]} & {parts[3]}"
+    return name_string  # return original if format is unexpected
+
+
 def format_couples(df):
+    # clean up name data
+    df[Column.NAME.value] = df[Column.NAME.value].apply(clean_names)
     # Last name column
     df[Column.LAST_NAME.value] = df[Column.NAME.value].str.extract(r"^(\w+),?")[0]
     # First name column
@@ -52,8 +63,6 @@ def convert_to_dollar(df):
 
 
 def create_csv(title, df):
-    # Name(s),First Name,First Name (Secondary),First Name (and prefix),Email,Total Pledged,Total Given (all-time)
-
     try:
         cols = [
             Column.NAME.value,
