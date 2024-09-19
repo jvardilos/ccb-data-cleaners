@@ -20,7 +20,7 @@ def clean_names(name_string):
     parts = [x.strip() for x in name_string.split(",")]
     if len(parts) == 4:
         # Format the string as: "lastname1, name1 & name2"
-        return f"{parts[0]}, {parts[1]} & {parts[3]}"
+        return f"{parts[0].strip()}, {parts[1].strip()} & {parts[3].strip()}"
     return name_string  # return original if format is unexpected
 
 
