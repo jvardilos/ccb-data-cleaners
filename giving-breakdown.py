@@ -13,6 +13,26 @@ class Column(Enum):
     PLEDGED = "Total Pledged"
     GIVEN = "Total Given (all-time)"
     EMAIL = "Email"
+    STREET = "Street"
+    CITY = "City"
+    STATE = "State"
+    POSTAL = "Postal Code"
+    ADDRESS = "Address"
+
+
+def format_address(df):
+    # Combine street, city, state, and postal code into a single address string
+    df[Column.ADDRESS.value] = (
+        df[Column.STREET.value]
+        + ", "
+        + df[Column.CITY.value]
+        + ", "
+        + df[Column.STATE.value]
+        + " "
+        + df[Column.POSTAL.value]
+    )
+
+    return df
 
 
 def clean_names(name_string):
@@ -39,7 +59,7 @@ def format_couples(df):
 
     # Creating the 'AND_SPOUSE' column
     df[Column.AND_SPOUSE.value] = df[Column.SPOUSE.value].apply(
-        lambda x: f"and {x}" if x else ""
+        lambda x: f" and {x}" if x else ""
     )
 
     return df
@@ -73,6 +93,7 @@ def create_csv(title, df):
             Column.PLEDGED.value,
             Column.GIVEN.value,
             Column.EMAIL.value,
+            Column.ADDRESS.value,
         ]
         df[cols].to_csv(title, index=False)
     except Exception as e:
@@ -82,7 +103,8 @@ def create_csv(title, df):
 def main():
     try:
         df = pd.read_csv(input_file)
-        formatted = format_couples(df)
+        formatted_c = format_couples(df)
+        formatted = format_address(formatted_c)
         pledged_givers, givers = filter_pledgers_and_givers(formatted)
         create_csv("FTO-pledge-givers.csv", pledged_givers)
         create_csv("FTO-no-pledge-givers.csv", givers)
