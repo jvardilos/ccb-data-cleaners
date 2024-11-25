@@ -10,19 +10,13 @@ giving_detail = "pledge_and_giving_detail.csv"
 class Column(Enum):
     NAME = "Name(s)"
     FAMILY = "Family"
-    START_DATE = "Start"
     LAST_NAME = "Last Name"
     FIRST_NAME = "First Name"
     SPOUSE = "Spouse"
     AND_SPOUSE = "Spouse2"
     PLEDGED = "Total Pledged"
-    GIVEN = "Total Given (all-time)"
     EMAIL = "Email"
-    STREET = "Street"
-    CITY = "City"
-    STATE = "State"
-    POSTAL = "Postal Code"
-    ADDRESS = "Address"
+    START_DATE = "Start"
 
 
 cols = [
@@ -79,24 +73,14 @@ def get_pledged(df):
 # we determined that start date is a good value for when a new person pledges
 def get_new_pledger(df):
     new = df[df[Column.START_DATE.value] == "2024-12-01"].copy()
-    return new
+    df_new_rm = df[~df.isin(new.to_dict(orient="list")).all(axis=1)]
+    return new, df_new_rm
 
 
 def handle_modification_pledger(mod, df):
-    modded = mod.merge(df, how="inner", on="Family")
-    return modded
-
-
-def get_no_change(df, new, mod):
-    # match columns
-    df = df[cols]
-    new = new[cols]
-    mod = mod[cols]
-
-    # remove new and modified pledgers
-    remove = df[~df.isin(new.to_dict(orient="list")).all(axis=1)]
-    remove = remove[~remove.isin(mod.to_dict(orient="list")).all(axis=1)]
-    return remove
+    dfm = df[df["Family"].isin(mod["Family"])]
+    remove = df[~df.isin(dfm.to_dict(orient="list")).all(axis=1)]
+    return dfm, remove
 
 
 def create_csv(title, df):
@@ -115,9 +99,8 @@ def main():
 
         create_csv("TESTING.csv", p)
 
-        new = get_new_pledger(p)
-        mod = handle_modification_pledger(mod_list, p)
-        no_change = get_no_change(p, new, mod)
+        new, df_new_rm = get_new_pledger(p)
+        mod, no_change = handle_modification_pledger(mod_list, df_new_rm)
 
         create_csv("new-pledgers.csv", new)
         create_csv("modified-pledgers.csv", mod)
