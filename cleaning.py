@@ -15,16 +15,18 @@ class Column(Enum):
 
 cols = [
     # for debugging
-    # Column.NAME.value,
+    Column.NAME.value,
     Column.FAMILY.value,
     Column.FIRST_NAME.value,
     # Only add "and spouse"
     Column.AND_SPOUSE.value,
-    # Column.SPOUSE.value,
+    Column.SPOUSE.value,
     Column.PLEDGED.value,
     Column.EMAIL.value,
     # for debugging
-    # Column.START_DATE.value,
+    Column.START_DATE.value,
+    "name_list",
+    "new_pledge",
 ]
 
 
