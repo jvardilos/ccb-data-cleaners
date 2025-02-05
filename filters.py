@@ -20,7 +20,7 @@ def filter_pledgers_and_givers(df):
 
 def filter_pledgers(pledgers):
 
-    full = pledgers[Column.PLEDGED_TIME == year_2]
-    half = pledgers[Column.PLEDGED_TIME == year_1]
+    full = pledgers[pledgers[Column.PLEDGED_TIME] == year_2]
+    half = pledgers[pledgers[Column.PLEDGED_TIME] == year_1]
 
     return half, full

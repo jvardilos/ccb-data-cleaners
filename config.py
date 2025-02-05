@@ -1,8 +1,8 @@
 givings_file = "givings.csv"
 families_file = "families.csv"
 
-year_1 = "12-1-2023"
-year_2 = "12-1-2023"
+year_1 = "2024-12-01"
+year_2 = "2023-12-01"
 
 
 class Column:

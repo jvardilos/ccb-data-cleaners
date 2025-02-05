@@ -48,9 +48,9 @@ def main():
     try:
         givings = pd.read_csv(givings_file)
         families = pd.read_csv(families_file)
-        pledged_1_year, pledged_2_years, givers = breakdowns(givings, families)
-        create_csv("1_year.csv", pledged_1_year)
-        create_csv("2_years.csv", pledged_2_years)
+        fto_halfway, fto_full, givers = breakdowns(givings, families)
+        create_csv("fto_halfway.csv", fto_halfway)
+        create_csv("fto_full.csv", fto_full)
         create_csv("givers.csv", givers)
     except FileNotFoundError:
         print("Error: {} or {} not found.".format(givings, families))
