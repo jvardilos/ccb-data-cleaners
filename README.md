@@ -27,14 +27,16 @@
      source deps/bin/activate
      ```
 
-2. Drop your giving csv into this directory and rename the `families_file` and `givings_file` variables in your python script
+2. Drop your giving csv into this directory and rename the `families_file` and `givings_file` variables in `config.py`
 
    ```python
    families_file = "<your csv>.csv"
    givings_file = "<your csv>.csv"
    ```
 
-- NOTE: do not check in sensitive file names
+- NOTE: do not check in sensitive files
+
+3. Put the date range you want in `config.py` to split pledgers on this campaign, delete this function if you do not need this in `filters`.
 
 ## Run Formatter
 
