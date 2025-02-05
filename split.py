@@ -1,69 +1,7 @@
 import pandas as pd
-
-givings_file = "givings.csv"
-families_file = "families.csv"
-
-
-class Column:
-    FAMILY = "Family"
-    FAMILY_ID = "Family ID"
-    REPLACED_NAME = "Primary Contact and Spouse"
-    PRIMARY = "Primary"
-    SPOUSE = "Spouse"
-    AND_SPOUSE = "Spouse2"
-    PLEDGED = "Total Pledged"
-    GIVEN = "Total Given (all-time)"
-    EMAIL = "Email"
-    STREET = "Street"
-    CITY = "City"
-    STATE = "State"
-    POSTAL = "Postal Code"
-    ADDRESS = "Address"
-
-
-def clean_names(n):
-    names = str(n).split(" & ")
-    primary = names[0]
-    spouse = names[1] if len(names) > 1 else None
-    and_spouse = " and " + names[1] if len(names) > 1 else None
-    return pd.Series([primary, spouse, and_spouse])
-
-
-def clean_address(df):
-    # Combine street, city, state, and postal code into a single address string
-    df[Column.ADDRESS] = (
-        df[Column.STREET]
-        + ", "
-        + df[Column.CITY]
-        + ", "
-        + df[Column.STATE]
-        + " "
-        + df[Column.POSTAL]
-    )
-
-    return df
-
-
-def convert_to_dollar(df):
-    df[Column.PLEDGED] = df[Column.PLEDGED].apply(lambda x: f"${x}")
-    df[Column.GIVEN] = df[Column.GIVEN].apply(lambda x: f"${x}")
-
-    return df
-
-
-def filter_pledgers_and_givers(df):
-    pledged_givers = df[df[Column.PLEDGED] > 0].copy()
-    givers = df[(df[Column.PLEDGED] == 0) & (df[Column.GIVEN] > 0)].copy()
-
-    dollar_pledged_givers = convert_to_dollar(pledged_givers)
-    dollar_givers = convert_to_dollar(givers)
-
-    return dollar_pledged_givers, dollar_givers
-
-
-def filter_pledgers(pledgers):
-    # TODO: make this split by new vs old pledgers
-    return pledgers, pledgers
+from config import Column, givings_file, families_file
+from cleaning import clean_names, clean_address
+from filters import filter_pledgers, filter_pledgers_and_givers
 
 
 # do we want these givers to include children's giving?
@@ -84,10 +22,9 @@ def breakdowns(givings, families):
 
     # make the splits
     pledgers, givers = filter_pledgers_and_givers(contacts)
-    year_1, year_2 = filter_pledgers(pledgers)
+    half, full = filter_pledgers(pledgers)
 
-    # 5. return them
-    return year_1, year_2, givers
+    return half, full, givers
 
 
 def create_csv(title, df):
