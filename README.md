@@ -38,6 +38,8 @@
 
 3. Put the date range you want in `config.py` to split pledgers on this campaign, delete this function if you do not need this in `filters`.
 
+4. From the "Pledge and Giving Summary" the "Unpledged Given (all-time)" and "Pledged Given(all-time)" can be filled into `config.py` for some data validation in `pledged` & `given`
+
 ## Run Formatter
 
 ```bash

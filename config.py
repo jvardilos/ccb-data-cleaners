@@ -4,6 +4,9 @@ families_file = "families.csv"
 year_1 = "2024-12-01"
 year_2 = "2023-12-01"
 
+pledge = 0.0
+given = 0.0
+
 
 class Column:
     FAMILY = "Family"
