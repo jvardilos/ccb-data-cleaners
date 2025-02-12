@@ -26,3 +26,6 @@ class Column:
     STATE = "State"
     POSTAL = "Postal Code"
     ADDRESS = "Address"
+    MOBILE_PHONE = "Mobile Phone"
+    HOME_PHONE = "Home Phone"
+    WORK_PHONE = "Work Phone"

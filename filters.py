@@ -8,6 +8,12 @@ def convert_to_dollar(df):
     return df
 
 
+def filter_no_addresses(df):
+    no_addresses = df[df[Column.ADDRESS].isna()]
+
+    return no_addresses
+
+
 def filter_pledgers_and_givers(df):
     pledged_givers = df[df[Column.TOTAL_PLEDGED] > 0].copy()
     givers = df[
