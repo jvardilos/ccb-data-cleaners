@@ -1,7 +1,7 @@
 import pandas as pd
 from config import Column, givings_file, families_file
 from cleaning import clean_names, clean_address
-from filters import filter_pledgers, filter_pledgers_and_givers
+from filters import filter_pledgers, filter_pledgers_and_givers, rename_cols
 
 
 # do we want these givers to include children's giving?
@@ -23,6 +23,10 @@ def breakdowns(givings, families):
     # make the splits
     pledgers, givers = filter_pledgers_and_givers(contacts)
     half, full = filter_pledgers(pledgers)
+
+    half = rename_cols(half)
+    full = rename_cols(full)
+    givers = rename_cols(givers)
 
     return half, full, givers
 
