@@ -1,6 +1,10 @@
 from config import Column, year_1, year_2, pledge, given
 
 
+def remove_non_members(df):
+    return df[df[Column.REPLACED_NAME].notna()]
+
+
 def convert_to_dollar(df):
     df[Column.TOTAL_PLEDGED] = df[Column.TOTAL_PLEDGED].apply(lambda x: f"${x}")
     df[Column.GIVEN_ALL_TIME] = df[Column.GIVEN_ALL_TIME].apply(lambda x: f"${x}")
@@ -43,7 +47,10 @@ def filter_pledgers_and_givers(df):
 
 def filter_pledgers(pledgers):
 
-    full = pledgers[pledgers[Column.PLEDGED_TIME] == year_2]
+    full = pledgers[
+        (pledgers[Column.PLEDGED_TIME] == year_2)
+        | (pledgers[Column.PLEDGED_TIME] == "varies")
+    ]
     half = pledgers[pledgers[Column.PLEDGED_TIME] == year_1]
 
     return half, full

@@ -6,6 +6,7 @@ from filters import (
     filter_pledgers_and_givers,
     filter_no_addresses,
     filter_no_emails,
+    remove_non_members,
     rename_cols,
 )
 
@@ -37,6 +38,8 @@ def breakdowns(givings, families):
 
     print(families[Column.ADDRESS])
 
+    contacts = remove_non_members(contacts)
+
     # make the splits
     no_email = filter_no_emails(contacts)
     no_address = filter_no_addresses(contacts)
@@ -67,21 +70,21 @@ def create_csv(title, df):
             Column.MOBILE_PHONE,
             Column.WORK_PHONE,
         ]
-        df[cols].to_csv(title, index=False)
+        df[cols].to_csv(title, encoding="utf-8-sig", index=False)
     except Exception as e:
         print(f"Failed to create CSV: {e}")
 
 
 def main():
     try:
-        givings = pd.read_csv(givings_file)
-        families = pd.read_csv(families_file)
+        givings = pd.read_csv(givings_file, encoding="utf-8-sig")
+        families = pd.read_csv(families_file, encoding="utf-8-sig")
         fto_halfway, fto_full, givers, no_address, no_email = breakdowns(
             givings, families
         )
-        create_csv("fto_halfway.csv", fto_halfway)
-        create_csv("fto_full.csv", fto_full)
-        create_csv("givers.csv", givers)
+        create_csv("FTO_one_year_pledge.csv", fto_halfway)
+        create_csv("FTO_two_year_pledge.csv", fto_full)
+        create_csv("FTO_giving_no_pledge.csv", givers)
         create_csv("no_address.csv", no_address)
         create_csv("no_email.csv", no_email)
     except FileNotFoundError:
