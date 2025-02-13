@@ -2,7 +2,9 @@ from config import Column, year_1, year_2, pledge, given
 
 
 def remove_non_members(df):
-    return df[df[Column.REPLACED_NAME].notna()]
+    members = df[df[Column.REPLACED_NAME].notna()]
+    non_members = df[df[Column.REPLACED_NAME].isna()]
+    return members, non_members
 
 
 def convert_to_dollar(df):
@@ -10,6 +12,18 @@ def convert_to_dollar(df):
     df[Column.GIVEN_ALL_TIME] = df[Column.GIVEN_ALL_TIME].apply(lambda x: f"${x}")
 
     return df
+
+
+def filter_no_addresses(df):
+    no_addresses = df[df[Column.ADDRESS].isna()]
+
+    return no_addresses
+
+
+def filter_no_emails(df):
+    no_emails = df[df[Column.EMAIL].isna()]
+
+    return no_emails
 
 
 def filter_pledgers_and_givers(df):
