@@ -5,6 +5,7 @@ from filters import (
     filter_pledgers,
     filter_pledgers_and_givers,
     filter_no_addresses,
+    filter_no_emails,
     rename_cols,
 )
 
@@ -37,6 +38,7 @@ def breakdowns(givings, families):
     print(families[Column.ADDRESS])
 
     # make the splits
+    no_email = filter_no_emails(contacts)
     no_address = filter_no_addresses(contacts)
     pledgers, givers = filter_pledgers_and_givers(contacts)
     half, full = filter_pledgers(pledgers)
@@ -45,8 +47,9 @@ def breakdowns(givings, families):
     full = rename_cols(full)
     givers = rename_cols(givers)
     no_address = rename_cols(no_address)
+    no_email = rename_cols(no_email)
 
-    return half, full, givers, no_address
+    return half, full, givers, no_address, no_email
 
 
 def create_csv(title, df):
@@ -73,11 +76,14 @@ def main():
     try:
         givings = pd.read_csv(givings_file)
         families = pd.read_csv(families_file)
-        fto_halfway, fto_full, givers, no_address = breakdowns(givings, families)
+        fto_halfway, fto_full, givers, no_address, no_email = breakdowns(
+            givings, families
+        )
         create_csv("fto_halfway.csv", fto_halfway)
         create_csv("fto_full.csv", fto_full)
         create_csv("givers.csv", givers)
         create_csv("no_address.csv", no_address)
+        create_csv("no_email.csv", no_email)
     except FileNotFoundError:
         print("Error: {} or {} not found.".format(givings, families))
     except pd.errors.EmptyDataError:

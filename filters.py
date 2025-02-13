@@ -14,6 +14,12 @@ def filter_no_addresses(df):
     return no_addresses
 
 
+def filter_no_emails(df):
+    no_emails = df[df[Column.EMAIL].isna()]
+
+    return no_emails
+
+
 def filter_pledgers_and_givers(df):
     pledged_givers = df[df[Column.TOTAL_PLEDGED] > 0].copy()
     givers = df[
