@@ -27,14 +27,6 @@ def breakdowns(givings, families):
     ].apply(clean_names)
 
     contacts = clean_address(contacts)
-    families = clean_address(families)
-
-    # Fill missing addresses in contacts with those from families
-    contacts[Column.ADDRESS] = contacts[Column.ADDRESS].fillna(
-        contacts[Column.FAMILY_ID].map(
-            families.set_index(Column.FAMILY_ID)[Column.ADDRESS]
-        )
-    )
 
     contacts, non_members = remove_non_members(contacts)
 
