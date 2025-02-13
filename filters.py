@@ -2,7 +2,9 @@ from config import Column, year_1, year_2, pledge, given
 
 
 def remove_non_members(df):
-    return df[df[Column.REPLACED_NAME].notna()]
+    members = df[df[Column.REPLACED_NAME].notna()]
+    non_members = df[df[Column.REPLACED_NAME].isna()]
+    return members, non_members
 
 
 def convert_to_dollar(df):
