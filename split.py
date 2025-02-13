@@ -36,8 +36,6 @@ def breakdowns(givings, families):
         )
     )
 
-    print(families[Column.ADDRESS])
-
     contacts = remove_non_members(contacts)
 
     # make the splits
