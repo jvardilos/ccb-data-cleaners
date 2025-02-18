@@ -61,6 +61,7 @@ def filter_pledgers(pledgers):
 def rename_cols(df):
     return df.rename(
         columns={
+            Column.PRIMARY: Column.NAME,
             Column.GIVEN_ALL_TIME: Column.GIVEN,
             Column.TOTAL_PLEDGED: Column.PLEDGED,
         }

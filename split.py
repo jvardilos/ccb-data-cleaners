@@ -22,9 +22,9 @@ def breakdowns(givings, families):
     )
 
     # clean names and addresses
-    contacts[[Column.PRIMARY, Column.SPOUSE, Column.AND_SPOUSE]] = contacts[
-        Column.REPLACED_NAME
-    ].apply(clean_names)
+    contacts[[Column.PRIMARY, Column.SPOUSE]] = contacts[Column.REPLACED_NAME].apply(
+        clean_names
+    )
 
     contacts = clean_address(contacts)
 
@@ -50,16 +50,12 @@ def create_csv(title, df):
     try:
         cols = [
             Column.FAMILY,
-            Column.PRIMARY,
+            Column.NAME,
             Column.SPOUSE,
-            Column.AND_SPOUSE,
             Column.PLEDGED,
             Column.GIVEN,
             Column.EMAIL,
             Column.ADDRESS,
-            Column.HOME_PHONE,
-            Column.MOBILE_PHONE,
-            Column.WORK_PHONE,
         ]
         df[cols].to_csv(title, encoding="utf-8-sig", index=False)
     except Exception as e:

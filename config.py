@@ -9,12 +9,12 @@ given = 0.0
 
 
 class Column:
+    NAME = "First Name"
     FAMILY = "Family"
     FAMILY_ID = "Family ID"
     REPLACED_NAME = "Primary Contact and Spouse"
     PRIMARY = "Primary"
-    SPOUSE = "Spouse"
-    AND_SPOUSE = "Spouse2"
+    SPOUSE = "Spouse Name"
     TOTAL_PLEDGED = "Total Pledged"
     PLEDGED = "Pledge"
     PLEDGED_TIME = "Start"
