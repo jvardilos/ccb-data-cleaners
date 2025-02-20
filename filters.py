@@ -32,8 +32,8 @@ def filter_pledgers_and_givers(df):
         (df[Column.TOTAL_PLEDGED] == 0) & (df[Column.GIVEN_ALL_TIME] > 0)
     ].copy()
 
-    pg_sum = pledged_givers[Column.GIVEN_ALL_TIME].sum()
-    g_sum = givers[Column.GIVEN_ALL_TIME].sum()
+    pg_sum = pledged_givers[Column.GIVEN_ALL_TIME].sum() * 100
+    g_sum = givers[Column.GIVEN_ALL_TIME].sum() * 100
     print("pledged amount:          ", pg_sum)
     print("pledged amount deficit:         ", pg_sum - pledge)
     print("given amount:            ", g_sum)
