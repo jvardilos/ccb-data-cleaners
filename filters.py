@@ -34,12 +34,14 @@ def filter_pledgers_and_givers(df):
 
     pg_sum = pledged_givers[Column.GIVEN_ALL_TIME].sum() * 100
     g_sum = givers[Column.GIVEN_ALL_TIME].sum() * 100
-    print("pledged amount:          ", pg_sum)
-    print("pledged amount deficit:         ", pg_sum - pledge)
-    print("given amount:            ", g_sum)
-    print("given amount deficit:           ", g_sum - given)
-    print("total given (all time):  ", pg_sum + g_sum)
-    print("total given original df: ", df[Column.GIVEN_ALL_TIME].sum())
+
+    if pledge and given != 0.0:
+        print("pledged amount:          ", pg_sum)
+        print("pledged amount deficit:         ", pg_sum - pledge)
+        print("given amount:            ", g_sum)
+        print("given amount deficit:           ", g_sum - given)
+        print("total given (all time):  ", pg_sum + g_sum)
+        print("total given original df: ", df[Column.GIVEN_ALL_TIME].sum())
 
     dollar_pledged_givers = convert_to_dollar(pledged_givers)
     dollar_givers = convert_to_dollar(givers)
