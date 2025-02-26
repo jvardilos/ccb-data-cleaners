@@ -9,21 +9,18 @@ from filters import (
     fix_non_members,
     rename_cols,
     fmt_families,
+    join_family_name,
 )
 
 
 def breakdowns(givings, families):
     contacts = get_contacts(givings, families)
     contacts = rename_cols(contacts)
-
-    # clean names and addresses
-    contacts[[Column.NAME, Column.SPOUSE]] = contacts[Column.REPLACED_NAME].apply(
-        clean_names
-    )
+    contacts = clean_address(contacts)
+    contacts[Column.NAME] = contacts[Column.REPLACED_NAME].apply(clean_names)
     contacts[Column.NAME] = contacts.apply(fix_non_members, axis=1)
     contacts[Column.FAMILY] = contacts[Column.THE_FAMILY].apply(fmt_families)
-
-    contacts = clean_address(contacts)
+    contacts[Column.FULL_NAMES] = contacts.apply(join_family_name, axis=1)
 
     # make the splits
     no_email = filter_no_emails(contacts)
@@ -45,11 +42,11 @@ def create_csv(title, df):
         cols = [
             Column.FAMILY,
             Column.NAME,
-            Column.SPOUSE,
             Column.PLEDGED,
             Column.GIVEN,
             Column.EMAIL,
             Column.ADDRESS,
+            Column.FULL_NAMES,
         ]
         df[cols].to_csv(title, encoding="utf-8-sig", index=False)
     except Exception as e:

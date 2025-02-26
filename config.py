@@ -16,7 +16,6 @@ class Column:
     PRIMARY = "Name(s)"
     TRIMMED = "Trimmed"
     TEMP = "Temp"
-    SPOUSE = "Spouse Name"
     TOTAL_PLEDGED = "Total Pledged"
     PLEDGED = "Pledge"
     PLEDGED_TIME = "Start"
@@ -32,3 +31,4 @@ class Column:
     HOME_PHONE = "Home Phone"
     WORK_PHONE = "Work Phone"
     THE_FAMILY = "The <Family> Family"
+    FULL_NAMES = "Full Names"

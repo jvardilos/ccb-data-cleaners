@@ -1,4 +1,3 @@
-import pandas as pd
 from config import Column
 
 
@@ -19,9 +18,7 @@ def get_contacts(givings, families):
 
 def clean_names(n):
     names = str(n).split(" & ")
-    first_name = names[0]
-    spouse = "and " + names[1] if len(names) > 1 else None
-    return pd.Series([first_name, spouse])
+    return names[0] + " and " + names[1] if len(names) > 1 else names[0]
 
 
 def clean_address(df):

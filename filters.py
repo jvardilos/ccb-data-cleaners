@@ -25,8 +25,16 @@ def filter_no_addresses(df):
     return no_addresses
 
 
+def join_family_name(df):
+    family = df[Column.FAMILY]
+    name = df[Column.NAME]
+
+    return name + " " + family
+
+
 def filter_no_emails(df):
-    no_emails = df[df[Column.EMAIL].isna()]
+    no_emails = df[df[Column.EMAIL].isna()].copy()
+    no_emails = convert_to_dollar(no_emails)
 
     return no_emails
 
