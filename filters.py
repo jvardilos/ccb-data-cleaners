@@ -1,10 +1,15 @@
 from config import Column, year_1, year_2, pledge, given
 
 
-def remove_non_members(df):
-    members = df[df[Column.REPLACED_NAME].notna()]
-    non_members = df[df[Column.REPLACED_NAME].isna()]
-    return members, non_members
+def fix_non_members(cols):
+    name = cols[Column.NAME]
+    primary = cols[Column.PRIMARY]
+    primary = str(primary).split(", ")[1].split(" & ")[0]
+
+    if name == "nan":
+        return primary
+
+    return name
 
 
 def convert_to_dollar(df):
