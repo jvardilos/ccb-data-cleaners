@@ -63,5 +63,10 @@ def rename_cols(df):
         columns={
             Column.GIVEN_ALL_TIME: Column.GIVEN,
             Column.TOTAL_PLEDGED: Column.PLEDGED,
+            Column.FAMILY: Column.THE_FAMILY,
         }
     )
+
+
+def fmt_families(family):
+    return str(family).split("The ")[1].split(" Family")[0]

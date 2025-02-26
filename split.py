@@ -8,6 +8,7 @@ from filters import (
     filter_no_emails,
     remove_non_members,
     rename_cols,
+    fmt_families,
 )
 
 
@@ -19,6 +20,8 @@ def breakdowns(givings, families):
     contacts[[Column.NAME, Column.SPOUSE]] = contacts[Column.REPLACED_NAME].apply(
         clean_names
     )
+
+    contacts[Column.FAMILY] = contacts[Column.THE_FAMILY].apply(fmt_families)
 
     contacts = clean_address(contacts)
 

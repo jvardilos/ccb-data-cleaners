@@ -31,3 +31,4 @@ class Column:
     MOBILE_PHONE = "Mobile Phone"
     HOME_PHONE = "Home Phone"
     WORK_PHONE = "Work Phone"
+    THE_FAMILY = "The <Family> Family"
