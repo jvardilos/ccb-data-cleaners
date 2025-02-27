@@ -7,6 +7,9 @@ year_2 = "2023-12-01"
 pledge = 0.0
 given = 0.0
 
+# Fill list with names you wish to exclude
+exclude = []
+
 
 class Column:
     NAME = "First Name"
