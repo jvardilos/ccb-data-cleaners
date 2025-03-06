@@ -1,18 +1,46 @@
 import pandas as pd
 
 from split import create_csv
-from config import one_year_file, two_year_file, giver_file
+from config import Column, one_year_file, two_year_file, giver_file
 
 
-def nameswitch(df):
-    print(df)
-    return df
+def switch_full_names(name):
+
+    names = str(name).split(" and ")
+
+    first_name = names[0]
+    second_name = str(names[1]).split(" ")[0]
+
+    return second_name + " and " + first_name
 
 
-def switching(one_year, two_year, giver):
-    one_year = nameswitch(one_year)
-    two_year = nameswitch(two_year)
-    giver = nameswitch(giver)
+def nameswitch(row):
+    family = row[Column.FULL_NAMES]
+    split_name = str(row[Column.NAME]).split(" and ")
+
+    if len(split_name) > 1:
+        print()
+        switch_prompt = (
+            input("family {}, Do you want to switch these names? (Y/n):".format(family))
+            .strip()
+            .lower()
+        )
+
+        if switch_prompt == "y" or switch_prompt == "":
+            row[Column.NAME] = split_name[1] + " and " + split_name[0]
+            full_name = switch_full_names(family) + " " + row[Column.FAMILY]
+            row[Column.FULL_NAMES] = full_name
+
+            print()
+            print("switched {}".format(row[Column.FULL_NAMES]))
+
+    return row
+
+
+def switching(one_year: pd.DataFrame, two_year, giver):
+    one_year = one_year.apply(nameswitch, axis=1)
+    two_year = two_year.apply(nameswitch, axis=1)
+    giver = giver.apply(nameswitch, axis=1)
     return one_year, two_year, giver
 
 
