@@ -9,12 +9,13 @@ given = 0.0
 
 
 class Column:
+    NAME = "First Name"
     FAMILY = "Family"
     FAMILY_ID = "Family ID"
     REPLACED_NAME = "Primary Contact and Spouse"
-    PRIMARY = "Primary"
-    SPOUSE = "Spouse"
-    AND_SPOUSE = "Spouse2"
+    PRIMARY = "Name(s)"
+    TRIMMED = "Trimmed"
+    TEMP = "Temp"
     TOTAL_PLEDGED = "Total Pledged"
     PLEDGED = "Pledge"
     PLEDGED_TIME = "Start"
@@ -29,3 +30,5 @@ class Column:
     MOBILE_PHONE = "Mobile Phone"
     HOME_PHONE = "Home Phone"
     WORK_PHONE = "Work Phone"
+    THE_FAMILY = "The <Family> Family"
+    FULL_NAMES = "Full Names"

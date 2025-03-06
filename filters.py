@@ -1,15 +1,20 @@
 from config import Column, year_1, year_2, pledge, given
 
 
-def remove_non_members(df):
-    members = df[df[Column.REPLACED_NAME].notna()]
-    non_members = df[df[Column.REPLACED_NAME].isna()]
-    return members, non_members
+def fix_non_members(cols):
+    name = cols[Column.NAME]
+    primary = cols[Column.PRIMARY]
+    primary = str(primary).split(", ")[1].split(" & ")[0]
+
+    if name == "nan":
+        return primary
+
+    return name
 
 
 def convert_to_dollar(df):
-    df[Column.TOTAL_PLEDGED] = df[Column.TOTAL_PLEDGED].apply(lambda x: f"${x}")
-    df[Column.GIVEN_ALL_TIME] = df[Column.GIVEN_ALL_TIME].apply(lambda x: f"${x}")
+    df[Column.PLEDGED] = df[Column.PLEDGED].apply(lambda x: f"${x}")
+    df[Column.GIVEN] = df[Column.GIVEN].apply(lambda x: f"${x}")
 
     return df
 
@@ -20,26 +25,34 @@ def filter_no_addresses(df):
     return no_addresses
 
 
+def join_family_name(df):
+    family = df[Column.FAMILY]
+    name = df[Column.NAME]
+
+    return name + " " + family
+
+
 def filter_no_emails(df):
-    no_emails = df[df[Column.EMAIL].isna()]
+    no_emails = df[df[Column.EMAIL].isna()].copy()
+    no_emails = convert_to_dollar(no_emails)
 
     return no_emails
 
 
 def filter_pledgers_and_givers(df):
-    pledged_givers = df[df[Column.TOTAL_PLEDGED] > 0].copy()
-    givers = df[
-        (df[Column.TOTAL_PLEDGED] == 0) & (df[Column.GIVEN_ALL_TIME] > 0)
-    ].copy()
+    pledged_givers = df[df[Column.PLEDGED] > 0].copy()
+    givers = df[(df[Column.PLEDGED] == 0) & (df[Column.GIVEN] > 0)].copy()
 
-    pg_sum = pledged_givers[Column.GIVEN_ALL_TIME].sum()
-    g_sum = givers[Column.GIVEN_ALL_TIME].sum()
-    print("pledged amount:          ", pg_sum)
-    print("pledged amount deficit:         ", pg_sum - pledge)
-    print("given amount:            ", g_sum)
-    print("given amount deficit:           ", g_sum - given)
-    print("total given (all time):  ", pg_sum + g_sum)
-    print("total given original df: ", df[Column.GIVEN_ALL_TIME].sum())
+    pg_sum = pledged_givers[Column.GIVEN].sum() * 100
+    g_sum = givers[Column.GIVEN].sum() * 100
+
+    if pledge and given != 0.0:
+        print("pledged amount:          ", pg_sum)
+        print("pledged amount deficit:         ", pg_sum - pledge)
+        print("given amount:            ", g_sum)
+        print("given amount deficit:           ", g_sum - given)
+        print("total given (all time):  ", pg_sum + g_sum)
+        print("total given original df: ", df[Column.GIVEN].sum())
 
     dollar_pledged_givers = convert_to_dollar(pledged_givers)
     dollar_givers = convert_to_dollar(givers)
@@ -63,5 +76,10 @@ def rename_cols(df):
         columns={
             Column.GIVEN_ALL_TIME: Column.GIVEN,
             Column.TOTAL_PLEDGED: Column.PLEDGED,
+            Column.FAMILY: Column.THE_FAMILY,
         }
     )
+
+
+def fmt_families(family):
+    return str(family).split("The ")[1].split(" Family")[0]

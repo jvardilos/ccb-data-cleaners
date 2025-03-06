@@ -1,13 +1,24 @@
-import pandas as pd
 from config import Column
+
+
+def get_contacts(givings, families):
+    # replace/new column of names of primary/spouse by family id found in families list
+
+    givings[Column.TEMP] = givings.groupby(Column.FAMILY_ID).cumcount()
+    families[Column.TEMP] = families.groupby(Column.FAMILY_ID).cumcount()
+
+    contacts = givings.merge(
+        families[[Column.FAMILY_ID, Column.REPLACED_NAME, Column.TEMP]],
+        on=[Column.FAMILY_ID, Column.TEMP],
+        how="left",
+    ).drop(columns=[Column.TEMP])
+
+    return contacts
 
 
 def clean_names(n):
     names = str(n).split(" & ")
-    primary = names[0]
-    spouse = names[1] if len(names) > 1 else None
-    and_spouse = " and " + names[1] if len(names) > 1 else None
-    return pd.Series([primary, spouse, and_spouse])
+    return names[0] + " and " + names[1] if len(names) > 1 else names[0]
 
 
 def clean_address(df):
