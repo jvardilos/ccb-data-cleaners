@@ -4,8 +4,11 @@ families_file = "families.csv"
 year_1 = "2024-12-01"
 year_2 = "2023-12-01"
 
-pledge = 0.0
-given = 0.0
+pledge = 0
+given = 0
+
+# Fill list with names you wish to exclude
+exclude = []
 
 
 class Column:
@@ -19,7 +22,7 @@ class Column:
     TOTAL_PLEDGED = "Total Pledged"
     PLEDGED = "Pledge"
     PLEDGED_TIME = "Start"
-    GIVEN_ALL_TIME = "Total Given (all-time)"
+    GIVEN_ALL_TIME = "Total Given (report date range)"
     GIVEN = "Given"
     EMAIL = "Email"
     STREET = "Street"

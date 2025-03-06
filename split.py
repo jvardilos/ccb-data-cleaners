@@ -1,5 +1,5 @@
 import pandas as pd
-from config import Column, givings_file, families_file
+from config import Column, givings_file, families_file, exclude
 from cleaning import clean_names, get_contacts, clean_address
 from filters import (
     filter_pledgers,
@@ -21,6 +21,7 @@ def breakdowns(givings, families):
     contacts[Column.NAME] = contacts.apply(fix_non_members, axis=1)
     contacts[Column.FAMILY] = contacts[Column.THE_FAMILY].apply(fmt_families)
     contacts[Column.FULL_NAMES] = contacts.apply(join_family_name, axis=1)
+    contacts = contacts[~contacts[Column.FULL_NAMES].isin(exclude)]
 
     # make the splits
     no_email = filter_no_emails(contacts)
