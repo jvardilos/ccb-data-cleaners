@@ -43,8 +43,8 @@ def filter_pledgers_and_givers(df):
     pledged_givers = df[df[Column.PLEDGED] > 0].copy()
     givers = df[(df[Column.PLEDGED] == 0) & (df[Column.GIVEN] > 0)].copy()
 
-    pg_sum = pledged_givers[Column.GIVEN].sum() * 100
-    g_sum = givers[Column.GIVEN].sum() * 100
+    pg_sum = int(pledged_givers[Column.GIVEN].sum() * 100)
+    g_sum = int(givers[Column.GIVEN].sum() * 100)
 
     if pledge and given != 0.0:
         print("pledged amount:          ", pg_sum)
