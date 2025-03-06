@@ -1,5 +1,15 @@
 import pandas as pd
-from config import Column, givings_file, families_file, exclude
+from config import (
+    Column,
+    givings_file,
+    families_file,
+    exclude,
+    one_year_file,
+    two_year_file,
+    giver_file,
+    no_address_file,
+    no_email_file,
+)
 from cleaning import clean_names, get_contacts, clean_address
 from filters import (
     filter_pledgers,
@@ -61,11 +71,11 @@ def main():
         fto_halfway, fto_full, givers, no_address, no_email = breakdowns(
             givings, families
         )
-        create_csv("FTO_one_year_pledge.csv", fto_halfway)
-        create_csv("FTO_two_year_pledge.csv", fto_full)
-        create_csv("FTO_giving_no_pledge.csv", givers)
-        create_csv("no_address.csv", no_address)
-        create_csv("no_email.csv", no_email)
+        create_csv(one_year_file, fto_halfway)
+        create_csv(two_year_file, fto_full)
+        create_csv(giver_file, givers)
+        create_csv(no_address_file, no_address)
+        create_csv(no_email_file, no_email)
     except FileNotFoundError:
         print("Error: {} or {} not found.".format(givings, families))
     except pd.errors.EmptyDataError:
