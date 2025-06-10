@@ -13,8 +13,8 @@ def fix_non_members(cols):
 
 
 def convert_to_dollar(df):
-    df[Column.PLEDGED] = df[Column.PLEDGED].apply(lambda x: f"${x}")
-    df[Column.GIVEN] = df[Column.GIVEN].apply(lambda x: f"${x}")
+    df[Column.PLEDGED] = df[Column.PLEDGED].apply(lambda x: f"${float(x):.2f}")
+    df[Column.GIVEN] = df[Column.GIVEN].apply(lambda x: f"${float(x):.2f}")
 
     return df
 
@@ -45,14 +45,19 @@ def filter_pledgers_and_givers(df):
 
     pg_sum = int(pledged_givers[Column.GIVEN].sum() * 100)
     g_sum = int(givers[Column.GIVEN].sum() * 100)
+    og = int(df[Column.GIVEN].sum() * 100)
 
     if pledge and given != 0.0:
+        print("summary amount:        x ", pledge)
         print("pledged amount:          ", pg_sum)
-        print("pledged amount deficit:         ", pg_sum - pledge)
+        print("pledged amount deficit:  ", pg_sum - pledge)
+        print("summary amount:        x ", given)
         print("given amount:            ", g_sum)
-        print("given amount deficit:           ", g_sum - given)
-        print("total given (all time):  ", pg_sum + g_sum)
-        print("total given original df: ", df[Column.GIVEN].sum())
+        print("given amount deficit:    ", g_sum - given)
+        print("total given:             ", pg_sum + g_sum)
+        print("summary given:           ", pledge + given)
+        print("total given original df: ", og)
+        print("deceased people's figure ", pledge + given - og)
 
     dollar_pledged_givers = convert_to_dollar(pledged_givers)
     dollar_givers = convert_to_dollar(givers)

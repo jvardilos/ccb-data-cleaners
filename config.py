@@ -17,6 +17,7 @@ exclude = []
 
 
 class Column:
+    CONTACT = "Contact"
     NAME = "First Name"
     FAMILY = "Family"
     FAMILY_ID = "Family ID"
