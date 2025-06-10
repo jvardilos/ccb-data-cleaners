@@ -1,4 +1,5 @@
 import pandas as pd
+import csv
 from config import (
     Column,
     givings_file,
@@ -10,7 +11,7 @@ from config import (
     no_address_file,
     no_email_file,
 )
-from cleaning import clean_names, get_contacts, clean_address
+from cleaning import clean_names, get_contacts, clean_address, full_names
 from filters import (
     filter_pledgers,
     filter_pledgers_and_givers,
@@ -32,6 +33,7 @@ def breakdowns(givings, families):
     contacts[Column.FAMILY] = contacts[Column.THE_FAMILY].apply(fmt_families)
     contacts[Column.FULL_NAMES] = contacts.apply(join_family_name, axis=1)
     contacts = contacts[~contacts[Column.FULL_NAMES].isin(exclude)]
+    contacts[Column.CONTACT] = full_names(contacts)
 
     # make the splits
     no_email = filter_no_emails(contacts)
@@ -51,6 +53,8 @@ def breakdowns(givings, families):
 def create_csv(title, df):
     try:
         cols = [
+            Column.FAMILY_ID,
+            Column.CONTACT,
             Column.FAMILY,
             Column.NAME,
             Column.PLEDGED,
@@ -59,7 +63,13 @@ def create_csv(title, df):
             Column.ADDRESS,
             Column.FULL_NAMES,
         ]
-        df[cols].to_csv(title, encoding="utf-8-sig", index=False)
+        df[cols].to_csv(
+            title,
+            encoding="utf-8-sig",
+            index=False,
+            quoting=csv.QUOTE_ALL,
+            quotechar='"',
+        )
     except Exception as e:
         print(f"Failed to create CSV: {e}")
 

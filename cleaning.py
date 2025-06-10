@@ -34,3 +34,7 @@ def clean_address(df):
     )
 
     return df
+
+
+def full_names(df):
+    return df[[Column.NAME, Column.FAMILY]].astype(str).agg(" ".join, axis=1)
